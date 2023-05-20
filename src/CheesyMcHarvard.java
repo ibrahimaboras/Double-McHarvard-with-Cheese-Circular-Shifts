@@ -1,0 +1,7 @@
+/**
+ * CheesyMcHarvard
+ */
+public class CheesyMcHarvard {
+
+    
+}
