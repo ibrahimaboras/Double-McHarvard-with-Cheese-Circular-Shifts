@@ -1,7 +1,5 @@
 import java.util.HashMap;
 
-import javax.imageio.spi.RegisterableService;
-
 // Word Addressable
 
 public class Register {
