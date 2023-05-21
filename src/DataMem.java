@@ -12,5 +12,9 @@ public class DataMem {
     public byte[] getData() {
         return data;
     }
+
+    public void setData(int index, byte newData) {
+        data[index] = newData;
+    }
     
 }
