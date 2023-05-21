@@ -87,7 +87,7 @@ public class CheesyMcHarvard {
 
         short instruction = 0;
 
-        for(int i = clockCycles; i < maxClockCycles; i++, clockCycles++){
+        for(int i = clockCycles; i <= maxClockCycles; i++, clockCycles++){
             if(clockCycles == 1){
                 instruction = fetch();
             }
@@ -110,7 +110,7 @@ public class CheesyMcHarvard {
         short[] data = iMems.getData();
         short instruction = data[pc.getInstToBeExec()];
         
-        pc.setInstToBeExec((byte)(pc.getInstToBeExec() + 1));
+        pc.setInstToBeExec((short)(pc.getInstToBeExec() + 1));
 
         return instruction;
     }
@@ -220,7 +220,7 @@ public class CheesyMcHarvard {
                 valueR1 = (byte)(immediate);
                 break;
             case 4:
-                if(valueR1 == 0) pc.setInstToBeExec((byte)(pc.getInstToBeExec() + 1 + immediate));
+                if(valueR1 == 0) pc.setInstToBeExec((short)(pc.getInstToBeExec() + 1 + immediate));
                 break;
             case 5:
                 byte and = (byte)(valueR1 & valueR2);
@@ -259,7 +259,7 @@ public class CheesyMcHarvard {
                 break;
             case 7: 
                 // int ans = (x << 2) | y; (concatination) 
-                pc.setInstToBeExec((byte)((valueR1 << 6) | valueR2));
+                pc.setInstToBeExec((short)((valueR1 << 6) | valueR2));
                 break;
             case 8:
                 byte slc = (byte)(valueR1 << immediate | valueR1 >>> (8-immediate));
