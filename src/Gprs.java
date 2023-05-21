@@ -1,8 +1,12 @@
 public class Gprs {  // 8 bits (255)
-    int[] registers; // may change to hashmap
+    private byte[] registers; // may change to hashmap
 
     public Gprs(){
-        registers = new int[64];
+        registers = new byte[64];
+    }
+
+    public byte[] getRegisters() {
+        return registers;
     }
 
 }
