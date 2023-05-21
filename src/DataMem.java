@@ -19,9 +19,9 @@ public class DataMem {
 
     @Override
     public String toString() {
-        String string = "[" + data[0];
+        String string = "[" + data[0] + ", ";
         for(int i = 1; i < data.length; i++)
-            string += data[i] + ",";
+            string += data[i] + ", ";
         return string;
     }
     

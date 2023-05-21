@@ -25,36 +25,8 @@ public class CheesyMcHarvard {
 
     
     public static void main(String[] args) throws Exception {
-    //    File file = new File("src\\AssemblyCode.txt");
-    //    BufferedReader br = new BufferedReader(new FileReader(file));
- 
-    //     // Declaring a string variable
-    //     String st;
-    //     String[] woah;
-    //     // Condition holds true till
-    //     // there is character in a string
-    //     while ((st = br.readLine()) != null){
-    //         woah = st.split(" ");
-    //         // Print the string
-    //         System.out.println(woah[0] + " R1: " + woah[1] + " R2: " + woah[2]);
-    //     }
-
-        CheesyMcHarvard x = new CheesyMcHarvard();
-        // x.getiMems().insertIntoInstructionMem("ADD R1 R0");
-        // System.out.println(x.getiMems().getData()[0]);
-        // x.getiMems().insertIntoInstructionMem("SUB R60 2"); // 0001 111100 0010
-        // System.out.println(x.getiMems());
-        File file = new File("src\\AssemblyCode.txt");
-        BufferedReader br = new BufferedReader(new FileReader(file));
-
-        String st;
-
-        // 66  /  4105  /  44805
-
-         while ((st = br.readLine()) != null){
-             x.getiMems().insertIntoInstructionMem(st);
-         }
-         System.out.println(x.getiMems());
+        CheesyMcHarvard cheesy = new CheesyMcHarvard();
+        cheesy.run();
 
     }
 
@@ -96,15 +68,20 @@ public class CheesyMcHarvard {
             }
             else if(clockCycles == 2){
                 decode(instruction);
-                instruction = fetch();
+                
+                if(clockCycles < maxClockCycles - 1)
+                    instruction = fetch();
             }
             else{
                 execute();
-
+                
                 System.out.println("New Value of Register " + r1 + " : " + valueR1); //Case Store not handled
 
-                decode(instruction);
-                instruction = fetch();
+                if(clockCycles < maxClockCycles)
+                    decode(instruction);
+
+                if(clockCycles < maxClockCycles - 1)
+                    instruction = fetch();
             }
         }
 
@@ -204,6 +181,7 @@ public class CheesyMcHarvard {
 
 
                 valueR1 = (byte)(valueR1 + valueR2);
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 1:
                 byte sub = (byte)(valueR1 - valueR2);
@@ -233,6 +211,7 @@ public class CheesyMcHarvard {
 
 
                 valueR1 = (byte)(valueR1 - valueR2);
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 2:
                 byte mult = (byte)(valueR1 * valueR2);
@@ -251,12 +230,15 @@ public class CheesyMcHarvard {
 
 
                 valueR1 = (byte)(valueR1 * valueR2);
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 3: 
                 valueR1 = (byte)(immediate);
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 4:
                 if(valueR1 == 0) pc.setInstToBeExec((short)(pc.getInstToBeExec() + 1 + immediate));
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 5:
                 byte and = (byte)(valueR1 & valueR2);
@@ -275,6 +257,7 @@ public class CheesyMcHarvard {
 
 
                 valueR1 = (byte)(valueR1 & valueR2);
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 6: 
                 byte or = (byte)(valueR1 | valueR2);
@@ -292,10 +275,12 @@ public class CheesyMcHarvard {
                     sreg.setStatus((byte)(0b00000001 | sreg.getStatus()));
 
                 valueR1 = (byte)(valueR1 | valueR2);
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 7: 
                 // int ans = (x << 2) | y; (concatination) 
                 pc.setInstToBeExec((short)((valueR1 << 6) | valueR2));
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 8:
                 byte slc = (byte)(valueR1 << immediate | valueR1 >>> (8-immediate));
@@ -314,6 +299,7 @@ public class CheesyMcHarvard {
 
             
                 valueR1 = (byte)(valueR1 << immediate | valueR1 >>> (8-immediate));
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 9:
                 byte src = (byte)(valueR1 >>> immediate | valueR1 << (8-immediate));
@@ -333,9 +319,11 @@ public class CheesyMcHarvard {
 
 
                 valueR1 = (byte)(valueR1 >>> immediate | valueR1 << (8-immediate));
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 10:
                 valueR1 = dMems.getData()[immediate];
+                gprs.setRegisters(r1, valueR1);
                 break;
             case 11:
                 dMems.setData(immediate, valueR1);

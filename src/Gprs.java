@@ -9,4 +9,8 @@ public class Gprs {  // 8 bits (255)
         return registers;
     }
 
+    public void setRegisters(int index, byte reg) {
+        this.registers[index] = reg;
+    }
+
 }
