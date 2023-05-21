@@ -25,7 +25,10 @@ public class CheesyMcHarvard {
 
     
     public static void main(String[] args) throws Exception {
+
         CheesyMcHarvard cheesy = new CheesyMcHarvard();
+        // cheesy.getGprs().setRegisters(1, (byte)130);
+        // cheesy.getGprs().setRegisters(2, (byte)130);
         cheesy.run();
 
     }
@@ -61,7 +64,7 @@ public class CheesyMcHarvard {
 
         for(int i = clockCycles; i <= maxClockCycles; i++, clockCycles++){
 
-            System.out.println("Clock Cycle: " + clockCycles);
+            System.out.println("Clock Cycle " + clockCycles + " : ");
 
             if(clockCycles == 1){
                 instruction = fetch();
@@ -75,7 +78,7 @@ public class CheesyMcHarvard {
             else{
                 execute();
                 
-                System.out.println("New Value of Register " + r1 + " : " + valueR1); //Case Store not handled
+                System.out.println("\t New Value of Register " + r1 + " : " + valueR1); //Case Store not handled
 
                 if(clockCycles < maxClockCycles)
                     decode(instruction);
@@ -87,7 +90,7 @@ public class CheesyMcHarvard {
 
         // Print PC
 
-        System.out.println("PC Register : " + pc.getInstToBeExec() + "\n");
+        System.out.println("\nPC Register : " + pc.getInstToBeExec() + "\n");
 
         // Print SREG
 
@@ -327,7 +330,7 @@ public class CheesyMcHarvard {
                 break;
             case 11:
                 dMems.setData(immediate, valueR1);
-                System.out.println("New Stored Vlaue at Address " + immediate + " : " + valueR1);
+                System.out.println("\t New Stored Vlaue at Address " + immediate + " : " + valueR1);
                 break;
 
         }
