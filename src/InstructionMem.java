@@ -13,8 +13,8 @@ public class InstructionMem {
     }
 
     public String toString(){
-        String string = "[";
-        for (int i = 0; i < size; i++) {
+        String string = "[" + data[0];
+        for (int i = 1; i < size; i++) {
             string += "," + data[i];
         }
         return string + "]";

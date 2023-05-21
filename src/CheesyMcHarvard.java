@@ -88,6 +88,9 @@ public class CheesyMcHarvard {
         short instruction = 0;
 
         for(int i = clockCycles; i <= maxClockCycles; i++, clockCycles++){
+
+            System.out.println("Clock Cycle: " + clockCycles);
+
             if(clockCycles == 1){
                 instruction = fetch();
             }
@@ -97,10 +100,43 @@ public class CheesyMcHarvard {
             }
             else{
                 execute();
+
+                System.out.println("New Value of Register " + r1 + " : " + valueR1); //Case Store not handled
+
                 decode(instruction);
                 instruction = fetch();
             }
         }
+
+        // Print PC
+
+        System.out.println("PC Register : " + pc.getInstToBeExec() + "\n");
+
+        // Print SREG
+
+        System.out.println("Status Register : " + sreg.getStatus());
+        System.out.println("\t Carry Flag : " + sreg.getCarry());
+        System.out.println("\t Overflow Flag : " + sreg.getOverFlow());
+        System.out.println("\t Negative Flag : " + sreg.getNegative());
+        System.out.println("\t Sign Flag : " + sreg.getSign());
+        System.out.println("\t Zero Flag : " + sreg.getZero());
+        System.out.println();
+
+        // Print GPRS
+
+        System.out.println("General Purpose Register: ");
+
+        for (int i = 0; i < gprs.getRegisters().length; i++) {
+            System.out.println("\t Register " + i + " : " + gprs.getRegisters()[i]);
+        }
+
+        // Print Memories
+
+        System.out.println("Data Memory : ");
+        System.out.println(dMems);
+
+        System.out.println("Instruction Memory : ");
+        System.out.println(iMems);
 
     }
 
@@ -302,7 +338,9 @@ public class CheesyMcHarvard {
                 valueR1 = dMems.getData()[immediate];
                 break;
             case 11:
-                dMems.setData(immediate, valueR1);;
+                dMems.setData(immediate, valueR1);
+                System.out.println("New Stored Vlaue at Address " + immediate + " : " + valueR1);
+                break;
 
         }
 

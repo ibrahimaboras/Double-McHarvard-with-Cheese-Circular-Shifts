@@ -16,5 +16,13 @@ public class DataMem {
     public void setData(int index, byte newData) {
         data[index] = newData;
     }
+
+    @Override
+    public String toString() {
+        String string = "[" + data[0];
+        for(int i = 1; i < data.length; i++)
+            string += data[i] + ",";
+        return string;
+    }
     
 }
