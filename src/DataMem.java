@@ -20,8 +20,10 @@ public class DataMem {
     @Override
     public String toString() {
         String string = "[" + data[0] + ", ";
-        for(int i = 1; i < data.length; i++)
-            string += data[i] + ", ";
+        for(int i = 1; i < data.length - 1; i++)
+            string += i + "(" + data[i] + ")" + ", ";
+
+        string += "2047" + "(" + data[2047] + ")" + "]\n";
         return string;
     }
     

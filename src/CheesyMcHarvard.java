@@ -57,6 +57,8 @@ public class CheesyMcHarvard {
 
         // Integer.parseInt(String, 2);
 
+        int tempPC = 0;
+
         int clockCycles = 1;
         int maxClockCycles = 3 + ((iMems.getSize() - 1) * 1);
 
@@ -66,27 +68,54 @@ public class CheesyMcHarvard {
 
             System.out.println("Clock Cycle " + clockCycles + " : ");
 
+            System.out.println("\t New Value of Register " + r1 + " : " + valueR1 + "\n"); //Case Store not handled
+
             if(clockCycles == 1){
                 instruction = fetch();
+                System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
             }
             else if(clockCycles == 2){
                 decode(instruction);
-                
-                if(clockCycles < maxClockCycles - 1)
+                System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being decoded");
+
+                if(clockCycles < maxClockCycles - 1){
+                    tempPC = pc.getInstToBeExec();
                     instruction = fetch();
+                    System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
+                }
             }
             else{
                 execute();
+                System.out.println("\t Instruction " + tempPC + " is being executed\n");
                 
-                System.out.println("\t New Value of Register " + r1 + " : " + valueR1); //Case Store not handled
+                // Print SREG
 
-                if(clockCycles < maxClockCycles)
+                System.out.println("\t Status Register : " + sreg.getStatus());
+                System.out.println("\t\t Carry Flag : " + sreg.getCarry());
+                System.out.println("\t\t Overflow Flag : " + sreg.getOverFlow());
+                System.out.println("\t\t Negative Flag : " + sreg.getNegative());
+                System.out.println("\t\t Sign Flag : " + sreg.getSign());
+                System.out.println("\t\t Zero Flag : " + sreg.getZero());
+                System.out.println();
+
+                sreg.setStatus((byte)0);
+
+                if(clockCycles < maxClockCycles){
                     decode(instruction);
-
-                if(clockCycles < maxClockCycles - 1)
+                    System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being decoded");
+                }
+                if(clockCycles < maxClockCycles - 1){
+                    tempPC = pc.getInstToBeExec();
                     instruction = fetch();
+                    System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
+                }
+
             }
         }
+
+        // Final Printing
+
+        System.out.println("\nData and Memories after execution: \n");
 
         // Print PC
 
@@ -112,7 +141,7 @@ public class CheesyMcHarvard {
 
         // Print Memories
 
-        System.out.println("Data Memory : ");
+        System.out.println("\nData Memory : ");
         System.out.println(dMems);
 
         System.out.println("Instruction Memory : ");
@@ -330,7 +359,7 @@ public class CheesyMcHarvard {
                 break;
             case 11:
                 dMems.setData(immediate, valueR1);
-                System.out.println("\t New Stored Vlaue at Address " + immediate + " : " + valueR1);
+                System.out.println("\t New Stored Vlaue at Address " + immediate + " : " + valueR1 + "\n");
                 break;
 
         }
