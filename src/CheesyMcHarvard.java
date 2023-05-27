@@ -51,7 +51,8 @@ public class CheesyMcHarvard {
            String st;
 
             while ((st = br.readLine()) != null){
-                iMems.insertIntoInstructionMem(st);
+                if(!st.equals(""))
+                    iMems.insertIntoInstructionMem(st);
             }
 
 
