@@ -14,6 +14,7 @@ public class DataMem {
     }
 
     public void setData(int index, byte newData) {
+        if(index < 0) index = index * -1;
         data[index] = newData;
     }
 

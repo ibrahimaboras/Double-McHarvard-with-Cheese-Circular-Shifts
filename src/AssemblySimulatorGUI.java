@@ -79,6 +79,8 @@ public class AssemblySimulatorGUI extends JFrame {
         runButton.setFont(new Font("Arial", Font.PLAIN, 14));
         runButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                openConsoleWindow(); // Open the console window
+
                 String assemblyCode = textEditor.getText();
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter("src/resources/AssemblyCode.txt"));
@@ -107,34 +109,22 @@ public class AssemblySimulatorGUI extends JFrame {
         });
         buttonPanel.add(runButton);
 
-        // Console Button
-        JButton consoleButton = new JButton("Console");
-        consoleButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        consoleButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (consoleFrame == null) {
-                    createConsoleFrame();
-                } else {
-                    consoleFrame.setVisible(true);
-                }
-            }
-        });
-        buttonPanel.add(consoleButton);
-
         setVisible(true);
     }
 
-    private void createConsoleFrame() {
-        consoleFrame = new JFrame("Console");
-        consoleFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        consoleFrame.setSize(800, 400);
-        consoleFrame.setLayout(new BorderLayout());
+    private void openConsoleWindow() {
+        if (consoleFrame == null) {
+            consoleFrame = new JFrame("Console");
+            consoleFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            consoleFrame.setSize(800, 400);
+            consoleFrame.setLayout(new BorderLayout());
 
-        // Output Area
-        outputArea = new JTextArea(10, 80);
-        outputArea.setEditable(false);
-        JScrollPane outputScrollPane = new JScrollPane(outputArea);
-        consoleFrame.add(outputScrollPane, BorderLayout.CENTER);
+            // Output Area
+            outputArea = new JTextArea(10, 80);
+            outputArea.setEditable(false);
+            JScrollPane outputScrollPane = new JScrollPane(outputArea);
+            consoleFrame.add(outputScrollPane, BorderLayout.CENTER);
+        }
 
         consoleFrame.setVisible(true);
     }

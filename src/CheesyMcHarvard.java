@@ -22,6 +22,8 @@ public class CheesyMcHarvard {
     private byte valueR1 = 0;
     private byte valueR2 = 0;
 
+    private int counter = 1;
+
 
     
     public static void main(String[] args) throws Exception {
@@ -65,28 +67,30 @@ public class CheesyMcHarvard {
 
         short instruction = 0;
 
-        for(int i = clockCycles; i <= maxClockCycles; i++, clockCycles++){
+        for(int i = clockCycles; i <= maxClockCycles; i++, clockCycles++, counter++){
 
             System.out.println("Clock Cycle " + clockCycles + " : ");
 
             System.out.println("\t New Value of Register " + r1 + " : " + valueR1 + "\n"); //Case Store not handled
 
-            if(clockCycles == 1){
-                instruction = fetch();
+            if(clockCycles == 1 || counter == 1){
                 System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
 
                 System.out.println("\n\t\t Inputs: ");
                 System.out.println("\t\t\t PC: " + pc.getInstToBeExec());
 
+                instruction = fetch();
+
                 System.out.println("\n\t\t Output: ");
                 System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
             }
-            else if(clockCycles == 2){
-                decode(instruction);
-                System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being decoded");
+            else if(clockCycles == 2 || counter == 2){
+                System.out.println("\t Instruction " + (pc.getInstToBeExec() - 1) + " is being decoded");
 
                 System.out.println("\n\t\t Inputs: ");
                 System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
+
+                decode(instruction);
 
                 System.out.println("\n\t\t Output: ");
                 System.out.println("\t\t\t Opcode: " + opcode);
@@ -98,19 +102,25 @@ public class CheesyMcHarvard {
 
                 if(clockCycles < maxClockCycles - 1){
                     tempPC = pc.getInstToBeExec();
-                    instruction = fetch();
+
                     System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
 
                     System.out.println("\n\t\t Inputs: ");
                     System.out.println("\t\t\t PC: " + pc.getInstToBeExec());
     
+                    instruction = fetch();
+
                     System.out.println("\n\t\t Output: ");
                     System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
                 }
             }
             else{
+                if(clockCycles == maxClockCycles)
+                    System.out.println("\t Instruction " + (pc.getInstToBeExec() - 1) + " is being executed\n");
+                else 
+                    System.out.println("\t Instruction " + (pc.getInstToBeExec() - 2) + " is being executed\n");
+
                 execute();
-                System.out.println("\t Instruction " + tempPC + " is being executed\n");
                 
                 System.out.println("\t Output: ");
 
@@ -128,13 +138,16 @@ public class CheesyMcHarvard {
 
                 sreg.setStatus((byte)0);
 
+                if(counter != 0){
+
                 if(clockCycles < maxClockCycles){
-                    decode(instruction);
-                    System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being decoded");
+                    System.out.println("\t Instruction " + (pc.getInstToBeExec() - 1) + " is being decoded");
 
                     System.out.println("\n\t\t Inputs: ");
                     System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
     
+                    decode(instruction);
+ 
                     System.out.println("\n\t\t Output: ");
                     System.out.println("\t\t\t Opcode: " + opcode);
                     System.out.println("\t\t\t R1: " + r1);
@@ -145,15 +158,20 @@ public class CheesyMcHarvard {
                 }
                 if(clockCycles < maxClockCycles - 1){
                     tempPC = pc.getInstToBeExec();
-                    instruction = fetch();
+                    
                     System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
 
                     System.out.println("\n\t\t Inputs: ");
                     System.out.println("\t\t\t PC: " + pc.getInstToBeExec());
+
+                    instruction = fetch();
     
                     System.out.println("\n\t\t Output: ");
                     System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
                 }
+            }
+
+            else maxClockCycles++;
 
             }
         }
@@ -316,7 +334,11 @@ public class CheesyMcHarvard {
                 gprs.setRegisters(r1, valueR1);
                 break;
             case 4:
-                if(valueR1 == 0) pc.setInstToBeExec((short)(pc.getInstToBeExec() + 1 + immediate));
+                if(valueR1 == 0){
+                    pc.setInstToBeExec((short)(pc.getInstToBeExec() - 1 + immediate));
+                    //System.out.println(pc.getInstToBeExec());
+                    counter = 0;
+                }
                 gprs.setRegisters(r1, valueR1);
                 break;
             case 5:
@@ -359,6 +381,7 @@ public class CheesyMcHarvard {
             case 7: 
                 // int ans = (x << 2) | y; (concatination) 
                 pc.setInstToBeExec((short)((valueR1 << 6) | valueR2));
+                counter = 1;
                 gprs.setRegisters(r1, valueR1);
                 break;
             case 8:
