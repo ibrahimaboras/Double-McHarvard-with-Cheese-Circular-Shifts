@@ -45,7 +45,7 @@ public class CheesyMcHarvard {
 
     public void run() throws Exception{
 
-           File file = new File("src\\AssemblyCode.txt");
+           File file = new File("src\\resources\\AssemblyCode.txt");
            BufferedReader br = new BufferedReader(new FileReader(file));
 
            String st;
