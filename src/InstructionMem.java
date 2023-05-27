@@ -90,7 +90,8 @@ public class InstructionMem {
             insertedData = (short)((r2) | insertedData);
         }
         else{
-            int immediate = Integer.parseInt(instruction[2]);
+            int temp = Integer.parseInt(instruction[2]);
+            int immediate = temp & 0b00000000000000000000000000111111;
             insertedData = (short)((immediate) | insertedData);
         }
 

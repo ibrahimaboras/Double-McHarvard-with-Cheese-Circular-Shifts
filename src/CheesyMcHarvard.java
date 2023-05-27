@@ -73,21 +73,48 @@ public class CheesyMcHarvard {
             if(clockCycles == 1){
                 instruction = fetch();
                 System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
+
+                System.out.println("\n\t\t Inputs: ");
+                System.out.println("\t\t\t PC: " + pc.getInstToBeExec());
+
+                System.out.println("\n\t\t Output: ");
+                System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
             }
             else if(clockCycles == 2){
                 decode(instruction);
                 System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being decoded");
 
+                System.out.println("\n\t\t Inputs: ");
+                System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
+
+                System.out.println("\n\t\t Output: ");
+                System.out.println("\t\t\t Opcode: " + opcode);
+                System.out.println("\t\t\t R1: " + r1);
+                System.out.println("\t\t\t R2: " + r2);
+                System.out.println("\t\t\t Immediate: " + immediate);
+                System.out.println("\t\t\t Value of R1: " + valueR1);
+                System.out.println("\t\t\t Value of R2: " + valueR2);
+
                 if(clockCycles < maxClockCycles - 1){
                     tempPC = pc.getInstToBeExec();
                     instruction = fetch();
                     System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
+
+                    System.out.println("\n\t\t Inputs: ");
+                    System.out.println("\t\t\t PC: " + pc.getInstToBeExec());
+    
+                    System.out.println("\n\t\t Output: ");
+                    System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
                 }
             }
             else{
                 execute();
                 System.out.println("\t Instruction " + tempPC + " is being executed\n");
                 
+                System.out.println("\t Output: ");
+
+                System.out.println("\t\t Final Value: " + valueR1);
+
                 // Print SREG
 
                 System.out.println("\t Status Register : " + sreg.getStatus());
@@ -103,11 +130,28 @@ public class CheesyMcHarvard {
                 if(clockCycles < maxClockCycles){
                     decode(instruction);
                     System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being decoded");
+
+                    System.out.println("\n\t\t Inputs: ");
+                    System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
+    
+                    System.out.println("\n\t\t Output: ");
+                    System.out.println("\t\t\t Opcode: " + opcode);
+                    System.out.println("\t\t\t R1: " + r1);
+                    System.out.println("\t\t\t R2: " + r2);
+                    System.out.println("\t\t\t Immediate: " + immediate);
+                    System.out.println("\t\t\t Value of R1: " + valueR1);
+                    System.out.println("\t\t\t Value of R2: " + valueR2);
                 }
                 if(clockCycles < maxClockCycles - 1){
                     tempPC = pc.getInstToBeExec();
                     instruction = fetch();
                     System.out.println("\t Instruction " + pc.getInstToBeExec() + " is being fetched");
+
+                    System.out.println("\n\t\t Inputs: ");
+                    System.out.println("\t\t\t PC: " + pc.getInstToBeExec());
+    
+                    System.out.println("\n\t\t Output: ");
+                    System.out.println("\t\t\t Instruction: " + Integer.toBinaryString(instruction & 0xFFFF));
                 }
 
             }
@@ -165,7 +209,9 @@ public class CheesyMcHarvard {
         opcode = (instruction & 0b1111000000000000) >>> 12;
         r1 = (instruction & 0b0000111111000000) >>> 6;
         r2 = (instruction & 0b0000000000111111);
-        immediate = (instruction & 0b0000000000111111);
+        int immediateSign = (instruction & 0b0000000000100000) >>> 5;
+        if(immediateSign == 1) immediate = (instruction | 0b11111111111111111111111111000000);
+        else immediate = (instruction & 0b0000000000111111);
 
         valueR1 = gprs.getRegisters()[r1];
         valueR2 = gprs.getRegisters()[r2];
