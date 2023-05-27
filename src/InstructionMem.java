@@ -13,9 +13,9 @@ public class InstructionMem {
     }
 
     public String toString(){
-        String string = "\t [" + "i" + 0 + "(" + data[0] + ")";
-        for (int i = 1; i < size; i++) {
-            string += ", " + "i" + i + "(" + data[i] + ")";
+        String string = "";
+        for (int i = 0; i < size; i++) {
+            string += "\t Instruction: " + i + ": " + data[i] + "\n------------------------------------------\n";
         }
         return string + "]";
     }
